@@ -40,10 +40,10 @@ def crossOff(new_labels, values):
 
 
 class Course:
-    def __init__(self, schedule, courses, lastChanged=[], isFirstLocal=False, ):
+    def __init__(self, schedule, reqs, courses, lastChanged=[], isFirstLocal=False, ):
         # array of size NUM_COURSES corresponding to the 12  courses that will be take type str
         self.schedule = schedule
-        self.requirement_chosen = range(NUM_COURSES)
+        self.requirement_chosen = reqs
 
         # dictionary of courses with all relevant information
         self.courses = courses
@@ -73,26 +73,26 @@ class Course:
     #### HELPER FUNCTIONS FOR COURSE PLANNER ####
     def get_prereqs(self, course):
         "list of prereqs for a particular course"
-        p, sat, sem = self.courses[course]
+        sem, p, sat = self.courses[course]
         return p
 
     def get_requirements(self, course):
         "list of requirements this course fulfills"
-        p, sat, sem = self.courses[course]
+        sem, p, sat = self.courses[course]
         return sat
 
     def get_semesters(self, course):
         "list of semesters that the course is offered"
-        p, sat, sem = self.courses[course]
+        sem, p, sat = self.courses[course]
         return sem
 
     def get_reqs(self):
-    "current requirements"
-    return list(self.schedule)
+      "current requirements"
+      return list(self.requirement_chosen)
 
     def get_schedule(self):
-    "current schedule"
-    return list(self.schedule)
+      "current schedule"
+      return list(self.schedule)
 
     def countViolations(self, class_id):
         violations = 0
@@ -138,7 +138,12 @@ class Course:
         """
         newSchedule = deepcopy(self.schedule)
         newSchedule[class_id] = name
-        return Course(newSchedule, self.courses, [class_id])
+
+        # chooses one of the requirements to assign to that course
+        newReqs = deepcocy(self.requirement_chosen)
+        reqs = self.get_requirements(name)
+        newReqs[class_id] = random.choice(reqs)
+        return Course(newSchedule, newReqs, self.courses, [class_id])
 
     # PART 1
     def firstEpsilonVariable(self):
@@ -431,26 +436,26 @@ class Course:
 
 
 ########## RUNS THE CSP AND SOLVES FOR SCHEDULE ##########
-def main(arguments):
-    global start, args
-    set_args(arguments)
-    start = Sudoku(boardEasy if args.easy else boardHard,
-                   isFirstLocal=args.localsearch)
+# def main(arguments):
+#     global start, args
+#     set_args(arguments)
+#     start = Sudoku(boardEasy if args.easy else boardHard,
+#                    isFirstLocal=args.localsearch)
 
-    print args
+#     print args
 
-    setup = '''
-from __main__ import start, solveLocal, solveCSP
-'''
-    solveSudoku = '''
-print 'Solution: ' + str(solveCSP(start))
-'''
-    solveSudokuLocal = '''
-print 'Solution: ' + str(solveLocal(start))
-'''
+#     setup = '''
+# from __main__ import start, solveLocal, solveCSP
+# '''
+#     solveSudoku = '''
+# print 'Solution: ' + str(solveCSP(start))
+# '''
+#     solveSudokuLocal = '''
+# print 'Solution: ' + str(solveLocal(start))
+# '''
 
-    print 'Time elapsed: ' + str(timeit.timeit(
-            solveSudokuLocal if args.localsearch else solveSudoku,
-            setup=setup, number=1))
+#     print 'Time elapsed: ' + str(timeit.timeit(
+#             solveSudokuLocal if args.localsearch else solveSudoku,
+#             setup=setup, number=1))
 
 
