@@ -141,7 +141,7 @@ class Course:
         newSchedule[class_id] = name
 
         # chooses one of the requirements to assign to that course
-        newReqs = deepcocy(self.requirement_chosen)
+        newReqs = deepcopy(self.requirement_chosen)
         reqs = self.get_requirements(name)
         newReqs[class_id] = random.choice(reqs)
         return Course(newSchedule, newReqs, self.courses, [class_id])
@@ -432,6 +432,7 @@ class Course:
 
         return
 
+########## SOLVE CSP ###############
 def solveCSP(problem):
     statesExplored = 0
     frontier = [problem]
@@ -463,6 +464,39 @@ def solveCSP(problem):
 
     return None
 
+
+#########  SOLVE LOCAL ###############
+def solveLocal(problem):
+    # for r in range(1):
+        # problem.randomRestart()
+        # state = problem
+        # originalConflicts = 0
+        # for i in range(100000):
+        #     originalConflicts = state.numConflicts()
+
+        #     v1, v2 = state.randomSwap()
+
+        #     state.gradientDescent(v1, v2)
+
+        #     if args.debug_ipython:
+        #         from time import sleep
+        #         from IPython import display
+        #         state.lastMoves = [s1, s2]
+        #         display.display(display.HTML(state.prettyprinthtml()))
+        #         display.clear_output(True)
+        #         sleep(0.5)
+
+        #     if state.numConflicts() == 0:
+        #         return state
+        #         break
+
+        #     if args.debug:
+        #         os.system("clear")
+        #         print state
+        #         raw_input("Press Enter to continue...")
+        # print "Conflicts left: " + str(originalConflicts)
+    return
+
 # schedule = [0] * NUM_COURSES
 # reqs = [0] * NUM_COURSES
 # courses = readdata.read_catalog()
@@ -491,32 +525,41 @@ def set_args(arguments):
 
     args = parser.parse_args(arguments)
 
+start = None
+args = None
+schedule = [0] * NUM_COURSES
+reqs = [0] * NUM_COURSES
+courses = readdata.read_catalog()
+
+
 ######### RUNS THE CSP AND SOLVES FOR SCHEDULE ##########
 def main(arguments):
+    print "we made it here"
     global start, args
     set_args(arguments)
-    schedule = [0] * NUM_COURSES
-    reqs = [0] * NUM_COURSES
-    courses = readdata.read_catalog()
+    # schedule = [0] * NUM_COURSES
+    # reqs = [0] * NUM_COURSES
+    # courses = readdata.read_catalog()
 
     start = Course(schedule, reqs, courses, isFirstLocal=args.localsearch)
 
-    print 'Solution: ' + str(solveCSP(start))
+    # print 'Solution: ' + str(solveCSP(start))
 
     print args
 
-#     setup = '''
-# from __main__ import start, solveLocal, solveCSP
-# '''
-#     solveSchedule = '''
-# print 'Solution: ' + str(solveCSP(start))
-# '''
-#     solveScheduleLocal = '''
-# print 'Solution: ' + str(solveLocal(start))
-# '''
+    setup = '''
+from __main__ import start, solveLocal, solveCSP
+'''
+    solveSchedule = '''
+print 'Solution: ' + str(solveCSP(start))
+'''
+    solveScheduleLocal = '''
+print 'Solution: ' + str(solveLocal(start))
+'''
 
-    # print 'Time elapsed: ' + str(timeit.timeit(
-    #         solveScheduleLocal if args.localsearch else solveSchedule,
-    #         setup=setup, number=1))
+    print 'Time elapsed: ' + str(timeit.timeit(
+            solveScheduleLocal if args.localsearch else solveSchedule,
+            setup=setup, number=1))
 
-
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))
