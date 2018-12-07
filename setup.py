@@ -44,12 +44,12 @@ class Course:
         p, sat, sem = self.courses[course]
         return p
 
-    def get_requirements(self, col):
+    def get_requirements(self, course):
         "list of requirements this course fulfills"
         p, sat, sem = self.courses[course]
         return sat
 
-    def get_semesters(self, b):
+    def get_semesters(self, course):
         "list of semesters that the course is offered"
         p, sat, sem = self.courses[course]
         return sem
@@ -95,37 +95,26 @@ class Course:
         # call firstEpsilonVariable
         return self.firstEpsilonVariable() == None
 
-    def variableDomain(self, r, c):
+    def variableDomain(self, class_id):
         """
         IMPLEMENT FOR PART 1
-        Returns current domain for the (row, col) variable, and [] if the
+        Returns current domain for the class_id variable, and [] if the
         domain is empty.
 
-        i.e. return a list of the possible number assignments to this variable
-        without breaking consistency for its row, column, or box.
+        i.e. return a list of the possible class assignments to this variable
+        without breaking consistency .
         """
         # keep track of elements that have been seen so far
-        seen_nums = set()
-        box_num = self.box_id(r,c)
+        seen_classes = set()
 
-        # elements in row
-        for i in self.row(r):
+        # elements in schedule
+        for i in self.schedule:
             if i != 0:
-                seen_nums.add(i)
-
-        # elements in column
-        for i in self.col(c):
-            if i != 0:
-                seen_nums.add(i)
-
-        # elements in box
-        for i in self.box(box_num):
-            if i != 0:
-                seen_nums.add(i)
+                seen_classes.add(i)
 
         # result is subtracting seen elements from set of 1 to 9
-        possible_nums = set(range(1,10))
-        diff = possible_nums.difference(seen_nums)
+        possible_classes = set(self.courses.keys())
+        diff = possible_classes.difference(seen_classes)
 
         return list(diff)
 
