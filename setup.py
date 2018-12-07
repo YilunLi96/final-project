@@ -201,7 +201,7 @@ class Course:
         precede it in the schedule
         """
 
-        self.class_conflicts[class_id] = countViolations(class_id)
+        self.class_conflicts[class_id] = self.countViolations(class_id)
 
         return
 
@@ -307,19 +307,15 @@ class Course:
         # self.updateAllFactors()
         return
 
-    def modifySwap(self, square1, square2):
+    def modifySwap(self, cl_id, other, sat):
         """
         Modifies the sudoku board to swap two
         row variable assignments.
         """
-        t = self.board[square1[0]][square1[1]]
-        self.board[square1[0]][square1[1]] = \
-            self.board[square2[0]][square2[1]]
-        self.board[square2[0]][square2[1]] = t
+        self.schedule[cl_id] = other
+        self.requirement_chosen[cl_id] = sat
 
-        self.lastMoves = [square1, square2]
-        self.updateVariableFactors(square1)
-        self.updateVariableFactors(square2)
+        self.updateAllFactors()
 
 
     def numConflicts(self):
@@ -341,25 +337,29 @@ class Course:
         """
 
         options = self.courses.keys()
-        classes = []
-        reqs = []
+        # hardcode testing
+        classes = ['Math21a', 'Math21b', 'CS50', 'CS51', 'CS121', 'CS124', 'Stat110', 'CS134', 'CS136', 'CS181']
+        reqs = ['calc', 'linalg', 'basic', 'basic', 'boaz', 'theory', 'tech', 'tech', 'breadth', 'breadth']
 
-        # loop over rows
-        for i in xrange(0,NUM_COURSES):
-            # pick a random class
-            cl = random.choice(options)
+        # # loop over rows
+        # for i in xrange(7,NUM_COURSES):
+        #     # pick a random class
+        #     cl = random.choice(options)
 
-            # pick a requirement you want it to satisfy
-            satisfies = self.get_requirements(cl)
-            sat = random.choice(satisfies)
+        #     # pick a requirement you want it to satisfy
+        #     satisfies = self.get_requirements(cl)
+        #     sat = random.choice(satisfies)
 
-            classes.append(cl)
-            reqs.append(sat)
+        #     classes.append(cl)
+        #     reqs.append(sat)
+
 
         self.schedule = classes
         self.requirement_chosen = reqs
 
+
         self.updateAllFactors() # to call at end of function
+        print self.numConflicts()
 
 
     # PART 6
@@ -375,19 +375,28 @@ class Course:
         """
 
         # finds variable that can be switched out
-        possible = []
+        # possible = []
+        # sched = self.get_schedule()
+        # for i in sched:
+        #     if self.class_conflicts[sched.index(i)] > 0:
+        #         possible = i
+
+        # if possible:
+        #     cl = random.choice(possible)
+        #     others = self.variableDomain(sched.index(cl))
+        #     other = random.choice(others)
+        #     return sched.index(cl), other
+        # else:
+        #     return None
+        possible = 0
         sched = self.get_schedule()
         for i in sched:
-            if self.class_conflicts[i] > 0:
-                possible.append(i)
+            if self.class_conflicts[sched.index(i)] > 0:
+                cl = i
 
-        if possible:
-            cl = random.choice(possible)
-            others = self.variableDomain()
-            other = random.choice(others)
-            return sched.index(cl), other
-        else:
-            return None
+        others = self.variableDomain(sched.index(cl))
+        other = random.choice(others)
+        return sched.index(cl), other
 
 
     # PART 7
@@ -402,13 +411,13 @@ class Course:
         board1.updateAllFactors()
 
         # check num of conflicts in each board, execute swap if viols lower
-        if board2.numConflicts() <= self.numConflicts():
-            self.modifySwap(variable1,variable2)
+        if board1.numConflicts() <= self.numConflicts():
+            self.modifySwap(cl_id, other, board1.requirement_chosen[cl_id])
             return
         else:
             # case where f is higher use probs
             if random.random() <= 0.001:
-                self.modifySwap(variable1,variable2)
+                self.modifySwap(cl_id, other, board1.requirement_chosen[cl_id])
 
             return
 
@@ -535,6 +544,7 @@ print 'Solution: ' + str(solveCSP(start))
     solveScheduleLocal = '''
 print 'Solution: ' + str(solveLocal(start))
 '''
+    print solveLocal(start)
 
     print 'Time elapsed: ' + str(timeit.timeit(
             solveScheduleLocal if args.localsearch else solveSchedule,
