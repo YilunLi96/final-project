@@ -14,6 +14,7 @@ import os
 import sys
 import random
 import argparse
+import readdata
 
 NUM_COURSES = 10
 
@@ -431,31 +432,91 @@ class Course:
 
         return
 
+def solveCSP(problem):
+    statesExplored = 0
+    frontier = [problem]
+    while frontier:
+        state = frontier.pop()
 
+        statesExplored += 1
+        if state.complete():
+            print 'Number of explored: ' + str(statesExplored)
+            return state.get_schedule()
+        else:
+            successors = state.getAllSuccessors()
+            if args.debug:
+                if not successors:
+                    print "DEADEND BACKTRACKING \n"
+            frontier.extend(successors)
 
+        if args.debug:
+            os.system("clear")
+            print state
+            raw_input("Press Enter to continue...")
 
+        # if args.debug_ipython:
+        #     from time import sleep
+        #     from IPython import display
+        #     display.display(display.HTML(state.prettyprinthtml()))
+        #     display.clear_output(True)
+        #     sleep(0.5)
 
-########## RUNS THE CSP AND SOLVES FOR SCHEDULE ##########
-# def main(arguments):
-#     global start, args
-#     set_args(arguments)
-#     start = Sudoku(boardEasy if args.easy else boardHard,
-#                    isFirstLocal=args.localsearch)
+    return None
 
-#     print args
+# schedule = [0] * NUM_COURSES
+# reqs = [0] * NUM_COURSES
+# courses = readdata.read_catalog()
+
+# start = Course(schedule, reqs, courses)
+
+# print 'Solution: ' + str(solveCSP(start))
+
+def set_args(arguments):
+    global start, args
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--easy', default=False, help="Use easy board.")
+    parser.add_argument('--debug', default=False, help="Print each state.")
+    parser.add_argument('--debug_ipython', default=False,
+                        help="Print each state in html.")
+
+    parser.add_argument('--localsearch', default=False,
+                        help="Use local search.")
+    parser.add_argument('--mostconstrained', default=False,
+                        help="Use most constrained heuristic.")
+    parser.add_argument('--forward', default=False,
+                        help="Use forward checking.")
+    parser.add_argument('--time', default=False)
+
+    args = parser.parse_args(arguments)
+
+######### RUNS THE CSP AND SOLVES FOR SCHEDULE ##########
+def main(arguments):
+    global start, args
+    set_args(arguments)
+    schedule = [0] * NUM_COURSES
+    reqs = [0] * NUM_COURSES
+    courses = readdata.read_catalog()
+
+    start = Course(schedule, reqs, courses, isFirstLocal=args.localsearch)
+
+    print 'Solution: ' + str(solveCSP(start))
+
+    print args
 
 #     setup = '''
 # from __main__ import start, solveLocal, solveCSP
 # '''
-#     solveSudoku = '''
+#     solveSchedule = '''
 # print 'Solution: ' + str(solveCSP(start))
 # '''
-#     solveSudokuLocal = '''
+#     solveScheduleLocal = '''
 # print 'Solution: ' + str(solveLocal(start))
 # '''
 
-#     print 'Time elapsed: ' + str(timeit.timeit(
-#             solveSudokuLocal if args.localsearch else solveSudoku,
-#             setup=setup, number=1))
+    # print 'Time elapsed: ' + str(timeit.timeit(
+    #         solveScheduleLocal if args.localsearch else solveSchedule,
+    #         setup=setup, number=1))
 
 
