@@ -22,24 +22,6 @@ NUM_COURSES = 10
 random.seed(18)  # IMPORTANT: DO NOT REMOVE!
 
 
-def crossOff(new_labels, values):
-    """
-    Removes seen courses from domain values (removes all the elements in values
-    that are also in nums).
-    Also counts the possible constraint violations.
-    """
-    violations = 0
-
-    # count violations for class_id
-    # for n in values:
-    #     # executes if n is not zero, or none
-    #     if n:
-    #         if not new_labels[n-1]:
-    #             violations += 1
-    #         new_labels[n-1] = None
-    # return violations
-
-
 class Course:
     def __init__(self, schedule, reqs, courses, lastChanged=[], isFirstLocal=False, ):
         # array of size NUM_COURSES corresponding to the 12  courses that will be take type str
@@ -176,7 +158,8 @@ class Course:
         i.e. if there are no more first epsilon variables
         """
         # call firstEpsilonVariable
-        return self.firstEpsilonVariable() == None
+        # return self.firstEpsilonVariable() == None
+        return self.numConflicts() == 0 and self.firstEpsilonVariable() == None
 
     def variableDomain(self, class_id):
         """
@@ -329,19 +312,19 @@ class Course:
         Modifies the sudoku board to swap two
         row variable assignments.
         """
-        # t = self.board[square1[0]][square1[1]]
-        # self.board[square1[0]][square1[1]] = \
-        #     self.board[square2[0]][square2[1]]
-        # self.board[square2[0]][square2[1]] = t
+        t = self.board[square1[0]][square1[1]]
+        self.board[square1[0]][square1[1]] = \
+            self.board[square2[0]][square2[1]]
+        self.board[square2[0]][square2[1]] = t
 
-        # self.lastMoves = [square1, square2]
-        # self.updateVariableFactors(square1)
-        # self.updateVariableFactors(square2)
-        return
+        self.lastMoves = [square1, square2]
+        self.updateVariableFactors(square1)
+        self.updateVariableFactors(square2)
+
 
     def numConflicts(self):
         "Returns the total number of conflicts"
-        return sum(self.class_conflicts)
+        return sum(self.class_conflicts.values())
 
     # PART 5
     def randomRestart(self):
@@ -356,27 +339,27 @@ class Course:
         NOTE: Please, please, please use random.shuffle() -- will help us out
               on the autograder side!
         """
+
+        options = self.courses.keys()
+        classes = []
+        reqs = []
+
         # loop over rows
-        # for i in xrange(0,9):
-        #     temp_list = range(1,10)
+        for i in xrange(0,NUM_COURSES):
+            # pick a random class
+            cl = random.choice(options)
 
-        #     # check what nums we need to shuffle
-        #     vals = self.row(i)
-        #     for j in vals:
-        #         if j != 0:
-        #             temp_list.remove(j)
+            # pick a requirement you want it to satisfy
+            satisfies = self.get_requirements(cl)
+            sat = random.choice(satisfies)
 
-        #     # shuffle those nums
-        #     random.shuffle(temp_list)
+            classes.append(cl)
+            reqs.append(sat)
 
-        #     # insert those nums
-        #     for j in xrange(0,9):
-        #         if vals[j] == 0:
-        #             self.board[i][j] = temp_list[0]
-        #             temp_list.pop(0)
+        self.schedule = classes
+        self.requirement_chosen = reqs
 
-        # self.updateAllFactors() # to call at end of function
-        return
+        self.updateAllFactors() # to call at end of function
 
 
     # PART 6
@@ -391,46 +374,44 @@ class Course:
         NOTE: DO NOT swap any of the variables already set: fixedVariables
         """
 
-        # keep choosing two variables without replacement and ensure none fixed
-        # flag = True
-        # r, c1, c2 = 0,0,0
-        # while flag:
-        #     # choose random row, inside loop ensures doesn't spin on one row
-        #     r, c1, c2 = random.randint(0,8), random.randint(0,8), random.randint(0,8)
+        # finds variable that can be switched out
+        possible = []
+        sched = self.get_schedule()
+        for i in sched:
+            if self.class_conflicts[i] > 0:
+                possible.append(i)
 
-        #     if (r,c1) not in self.fixedVariables and (r,c2) not in self.fixedVariables:
-        #         flag = False
-
-        # return (r,c1), (r,c2)
-
-        return
+        if possible:
+            cl = random.choice(possible)
+            others = self.variableDomain()
+            other = random.choice(others)
+            return sched.index(cl), other
+        else:
+            return None
 
 
     # PART 7
-    def gradientDescent(self, variable1, variable2):
+    def gradientDescent(self, cl_id, other):
         """
         IMPLEMENT FOR PART 7
         Decide if we should swap the values of variable1 and variable2.
         """
-        # a,b = variable1
-        # c,d = variable2
-        # # create new board with switched vars
-        # board1 = self.setVariable(a,b,self.board[c][d])
-        # board2 = board1.setVariable(c,d,self.board[a][b])
-        # board2.updateAllFactors()
 
-        # # check num of conflicts in each board, execute swap if viols lower
-        # if board2.numConflicts() <= self.numConflicts():
-        #     self.modifySwap(variable1,variable2)
-        #     return
-        # else:
-        #     # case where f is higher use probs
-        #     if random.random() <= 0.001:
-        #         self.modifySwap(variable1,variable2)
+        # create new board with switched vars
+        board1 = self.setVariable(cl_id, other)
+        board1.updateAllFactors()
 
-        #     return
+        # check num of conflicts in each board, execute swap if viols lower
+        if board2.numConflicts() <= self.numConflicts():
+            self.modifySwap(variable1,variable2)
+            return
+        else:
+            # case where f is higher use probs
+            if random.random() <= 0.001:
+                self.modifySwap(variable1,variable2)
 
-        return
+            return
+
 
 ########## SOLVE CSP ###############
 def solveCSP(problem):
@@ -467,35 +448,34 @@ def solveCSP(problem):
 
 #########  SOLVE LOCAL ###############
 def solveLocal(problem):
-    # for r in range(1):
-        # problem.randomRestart()
-        # state = problem
-        # originalConflicts = 0
-        # for i in range(100000):
-        #     originalConflicts = state.numConflicts()
+    for r in range(1):
+        problem.randomRestart()
+        state = problem
+        originalConflicts = 0
+        for i in range(100000):
+            originalConflicts = state.numConflicts()
 
-        #     v1, v2 = state.randomSwap()
+            cl_id, other = state.randomSwap()
 
-        #     state.gradientDescent(v1, v2)
+            state.gradientDescent(cl_id, other)
 
-        #     if args.debug_ipython:
-        #         from time import sleep
-        #         from IPython import display
-        #         state.lastMoves = [s1, s2]
-        #         display.display(display.HTML(state.prettyprinthtml()))
-        #         display.clear_output(True)
-        #         sleep(0.5)
+            # if args.debug_ipython:
+            #     from time import sleep
+            #     from IPython import display
+            #     state.lastMoves = [s1, s2]
+            #     display.display(display.HTML(state.prettyprinthtml()))
+            #     display.clear_output(True)
+            #     sleep(0.5)
 
-        #     if state.numConflicts() == 0:
-        #         return state
-        #         break
+            if state.numConflicts() == 0:
+                return state
+                break
 
-        #     if args.debug:
-        #         os.system("clear")
-        #         print state
-        #         raw_input("Press Enter to continue...")
-        # print "Conflicts left: " + str(originalConflicts)
-    return
+            if args.debug:
+                os.system("clear")
+                print state
+                raw_input("Press Enter to continue...")
+        print "Conflicts left: " + str(originalConflicts)
 
 # schedule = [0] * NUM_COURSES
 # reqs = [0] * NUM_COURSES
@@ -534,7 +514,6 @@ courses = readdata.read_catalog()
 
 ######### RUNS THE CSP AND SOLVES FOR SCHEDULE ##########
 def main(arguments):
-    print "we made it here"
     global start, args
     set_args(arguments)
     # schedule = [0] * NUM_COURSES
