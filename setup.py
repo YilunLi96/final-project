@@ -15,21 +15,54 @@ import sys
 import random
 import argparse
 
+NUM_COURSES = 10
+
 
 random.seed(18)  # IMPORTANT: DO NOT REMOVE!
 
+
+def crossOff(values, nums):
+    """
+    Removes seen courses from domain values (removes all the elements in values
+    that are also in nums).
+    Also counts the possible constraint violations.
+    """
+    violations = 0
+    for n in nums:
+        # executes if n is not zero, or none
+        if n:
+            if not values[n-1]:
+                violations += 1
+            values[n-1] = None
+    return violations
+
 class Course:
     def __init__(self, schedule, courses, lastChanged=[], isFirstLocal=False, ):
-        # array of size 12 corresponding to the 12  courses that will be take type str
+        # array of size NUM_COURSES corresponding to the 12  courses that will be take type str
         self.schedule = schedule
+        self.requirement_chosen = range(NUM_COURSES)
 
         # dictionary of courses with all relevant information
         self.courses = courses
 
         # list of classes that can still be taken
-        self.classes_remaining = []
+        self.classes_remaining = {}
 
-        # The number of conflicts at a course slot (any of the 12)
+
+        # set up how many of each category requirement we need
+        counts = dict()
+        counts['linalg'] = 1
+        counts['calc'] = 1
+        counts['basic'] = 2
+        counts['boaz'] = 1
+        counts['theory'] = 1
+        counts['tech'] = 2
+        counts['breadth'] = 2
+
+        self.requirement_counts = counts
+
+
+        # The number of conflicts at a course slot (any of the 10)
         self.class_conflicts = {}
 
         # For local search. Keep track of the factor state.
@@ -54,6 +87,10 @@ class Course:
         p, sat, sem = self.courses[course]
         return sem
 
+    def get_schedule(self):
+    "current schedule"
+    return list(self.schedule)
+
     def setVariable(self, class_id, name):
         """
         Creates a new version of the schedule with a certain class slot set to
@@ -76,7 +113,7 @@ class Course:
             for c in col:
         """
         # search across the schedule and return class_id of first zero
-        for class_id in xrange(0,12):
+        for class_id in xrange(0,NUM_COURSES):
             var = self.schedule[class_id]
             if var == 0:
               return class_id
@@ -119,7 +156,7 @@ class Course:
         return list(diff)
 
     # PART 2
-    def updateFactor(self, factor_type, i):
+    def updateFactor(self, class_id):
         """
         IMPLEMENT FOR PART 2
         Update the values remaining for a factor.
@@ -131,50 +168,34 @@ class Course:
         and factorRemaining to contain the remaining numbers not yet assigned
         in the factor.
 
-        Hint: crossOff may be useful here
+        conflicts for a specific course will only ever involve courses that
+        precede it in the schedule
         """
-        values = []
-        new_labels = range(1,10)
+        values = self.get_schedule()
+        new_labels = self.courses.keys()
 
-        if factor_type == BOX:
-            values = self.box(i)
-
-        if factor_type == ROW:
-            values = self.row(i)
-
-        if factor_type == COL:
-            values = self.col(i)
-
-        self.factorNumConflicts[factor_type, i] = crossOff(new_labels,values)
-        self.factorRemaining[factor_type, i] = new_labels
+        self.class_conflicts[class_id] = crossOff(new_labels,values)
+        self.classes_remaining[class_id] = new_labels
 
         return
 
     def updateAllFactors(self):
         """
         IMPLEMENT FOR PART 2
-        Update the values remaining for all factors.
-        There is one factor for each row, column, and box.
+        Update the values remaining for all class slots
         """
         # call updateFactor on each factor
-        for i in [BOX, ROW, COL]:
-            for j in xrange(0,9):
-                self.updateFactor(i,j)
+        for j in xrange(0,NUM_COURSES):
+            self.updateFactor(j)
 
         return
 
-    def updateVariableFactors(self, variable):
+    def updateVariableFactors(self):
         """
         IMPLEMENT FOR PART 2
         Update all the factors impacting a variable (neighbors in factor graph).
         """
-        (a,b) = variable
-        box_num = self.box_id(a,b)
-
-        # update the corresponding row, column, and box
-        self.updateFactor(ROW,a)
-        self.updateFactor(COL,b)
-        self.updateFactor(BOX,box_num)
+        self.updateAllFactors()
 
         return
 
@@ -274,92 +295,92 @@ class Course:
 
     def numConflicts(self):
         "Returns the total number of conflicts"
-        return sum(self.factorNumConflicts.values())
+        return sum(self.class_conflicts)
 
-    # PART 5
-    def randomRestart(self):
-        """
-        IMPLEMENT FOR PART 5
-        Randomly initialize a complete, potentially inconsistent board, making
-        sure that all row factors are being held consistent.  Meaning,
-        the board may be inconsistent, but every row must contain each of the
-        numbers in the domain.  Also make sure that you check before assigning
-        a number to a position that a number isn't ALREADY assigned there!
+    # # PART 5
+    # def randomRestart(self):
+    #     """
+    #     IMPLEMENT FOR PART 5
+    #     Randomly initialize a complete, potentially inconsistent board, making
+    #     sure that all row factors are being held consistent.  Meaning,
+    #     the board may be inconsistent, but every row must contain each of the
+    #     numbers in the domain.  Also make sure that you check before assigning
+    #     a number to a position that a number isn't ALREADY assigned there!
 
-        NOTE: Please, please, please use random.shuffle() -- will help us out
-              on the autograder side!
-        """
-        # loop over rows
-        for i in xrange(0,9):
-            temp_list = range(1,10)
+    #     NOTE: Please, please, please use random.shuffle() -- will help us out
+    #           on the autograder side!
+    #     """
+    #     # loop over rows
+    #     for i in xrange(0,9):
+    #         temp_list = range(1,10)
 
-            # check what nums we need to shuffle
-            vals = self.row(i)
-            for j in vals:
-                if j != 0:
-                    temp_list.remove(j)
+    #         # check what nums we need to shuffle
+    #         vals = self.row(i)
+    #         for j in vals:
+    #             if j != 0:
+    #                 temp_list.remove(j)
 
-            # shuffle those nums
-            random.shuffle(temp_list)
+    #         # shuffle those nums
+    #         random.shuffle(temp_list)
 
-            # insert those nums
-            for j in xrange(0,9):
-                if vals[j] == 0:
-                    self.board[i][j] = temp_list[0]
-                    temp_list.pop(0)
+    #         # insert those nums
+    #         for j in xrange(0,9):
+    #             if vals[j] == 0:
+    #                 self.board[i][j] = temp_list[0]
+    #                 temp_list.pop(0)
 
-        self.updateAllFactors() # to call at end of function
-        return
-
-
-    # PART 6
-    def randomSwap(self):
-        """
-        IMPLEMENT FOR PART 6
-        Returns two random variables that can be swapped without
-        causing a row factor conflict.
-        i.e. return (r0, c0), (r1, c1) if v0 and v1 are two non fixed variables
-        that can be swapped without causing any row inconsistencies.
-
-        NOTE: DO NOT swap any of the variables already set: fixedVariables
-        """
-
-        # keep choosing two variables without replacement and ensure none fixed
-        flag = True
-        r, c1, c2 = 0,0,0
-        while flag:
-            # choose random row, inside loop ensures doesn't spin on one row
-            r, c1, c2 = random.randint(0,8), random.randint(0,8), random.randint(0,8)
-
-            if (r,c1) not in self.fixedVariables and (r,c2) not in self.fixedVariables:
-                flag = False
-
-        return (r,c1), (r,c2)
+    #     self.updateAllFactors() # to call at end of function
+    #     return
 
 
-    # PART 7
-    def gradientDescent(self, variable1, variable2):
-        """
-        IMPLEMENT FOR PART 7
-        Decide if we should swap the values of variable1 and variable2.
-        """
-        a,b = variable1
-        c,d = variable2
-        # create new board with switched vars
-        board1 = self.setVariable(a,b,self.board[c][d])
-        board2 = board1.setVariable(c,d,self.board[a][b])
-        board2.updateAllFactors()
+    # # PART 6
+    # def randomSwap(self):
+    #     """
+    #     IMPLEMENT FOR PART 6
+    #     Returns two random variables that can be swapped without
+    #     causing a row factor conflict.
+    #     i.e. return (r0, c0), (r1, c1) if v0 and v1 are two non fixed variables
+    #     that can be swapped without causing any row inconsistencies.
 
-        # check num of conflicts in each board, execute swap if viols lower
-        if board2.numConflicts() <= self.numConflicts():
-            self.modifySwap(variable1,variable2)
-            return
-        else:
-            # case where f is higher use probs
-            if random.random() <= 0.001:
-                self.modifySwap(variable1,variable2)
+    #     NOTE: DO NOT swap any of the variables already set: fixedVariables
+    #     """
 
-            return
+    #     # keep choosing two variables without replacement and ensure none fixed
+    #     flag = True
+    #     r, c1, c2 = 0,0,0
+    #     while flag:
+    #         # choose random row, inside loop ensures doesn't spin on one row
+    #         r, c1, c2 = random.randint(0,8), random.randint(0,8), random.randint(0,8)
+
+    #         if (r,c1) not in self.fixedVariables and (r,c2) not in self.fixedVariables:
+    #             flag = False
+
+    #     return (r,c1), (r,c2)
+
+
+    # # PART 7
+    # def gradientDescent(self, variable1, variable2):
+    #     """
+    #     IMPLEMENT FOR PART 7
+    #     Decide if we should swap the values of variable1 and variable2.
+    #     """
+    #     a,b = variable1
+    #     c,d = variable2
+    #     # create new board with switched vars
+    #     board1 = self.setVariable(a,b,self.board[c][d])
+    #     board2 = board1.setVariable(c,d,self.board[a][b])
+    #     board2.updateAllFactors()
+
+    #     # check num of conflicts in each board, execute swap if viols lower
+    #     if board2.numConflicts() <= self.numConflicts():
+    #         self.modifySwap(variable1,variable2)
+    #         return
+    #     else:
+    #         # case where f is higher use probs
+    #         if random.random() <= 0.001:
+    #             self.modifySwap(variable1,variable2)
+
+    #         return
 
 
 
