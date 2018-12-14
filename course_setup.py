@@ -74,17 +74,6 @@ def countViolations(class_id, classes):
     	if class_req_count[req] > counts[req]:
     		if (class_id, req) in classes_list:
     			violations += 1
-    			print 'ha'
-
-
-    # reqs = self.get_reqs()
-    # req = reqs[class_id]
-    # ctr = 0
-    # for i in reqs:
-    #     if i == req and class_id != i:
-    #         ctr += 1
-    # if ctr > self.requirement_counts[req]:
-    #     violations += 1
 
     # prereq not present
     prereqs = get_prereqs(class_id)
@@ -111,8 +100,6 @@ def countViolations(class_id, classes):
 
 
 def sort_class(classes):
-	return classes
+    classes = distribute_courses_to_req(classes)
 
-
-# print get_prereqs('CS182')
-# print get_requirements('CS182')
+    return classes
