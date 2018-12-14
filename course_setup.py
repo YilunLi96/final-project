@@ -101,5 +101,4 @@ def countViolations(class_id, classes):
 
 def sort_class(classes):
     classes = distribute_courses_to_req(classes)
-
     return classes
