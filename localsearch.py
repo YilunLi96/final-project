@@ -21,9 +21,17 @@ def hill_climbing():
 		# loop through courses not in course_lst such that adding it doesn't add violation or violation decreases
 		# add first one found
 		# next iteration of while loop
+		
 
 	return course_lst
 
-print hill_climbing()
+# print sort_class(hill_climbing())
 
 # print len(course_catalog)
+
+# print countViolations('CS182', ['Math21a', 'Math21b', 'CS50', 'CS161', 'CS121', 'CS124', 'CS61', 'CS134', 'CS136', 'CS181'])
+
+# print countViolations('Math21a', ['Math21a', 'Math21b', 'CS50', 'CS161', 'CS121', 'CS124', 'CS61', 'CS134', 'CS136', 'CS181'])
+# print distribute_courses_to_req(['Math21a', 'Math21b', 'CS50', 'CS161', 'CS121', 'CS124', 'CS61', 'CS134', 'CS136', 'CS181'])
+
+print count_courselist_totalviolations(['Math21a', 'Math21b', 'CS50', 'CS161', 'CS121', 'CS124', 'CS61', 'CS134', 'CS136', 'CS181'])
