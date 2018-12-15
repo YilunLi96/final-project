@@ -1,9 +1,9 @@
 from localsearch import *
 
 
-print sort_class(hill_climbing())
+print sort_class(iterative_less_conflicts())
 
-print courses['Stat110']
+# print courses['Stat110']
 
 # print len(course_catalog)
 

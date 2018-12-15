@@ -99,6 +99,16 @@ def countViolations(class_id, classes):
     return violations
 
 
+def count_courselist_totalviolations(list_of_courses):
+    violations = 0
+    vio_list = []
+    for course in list_of_courses:
+        v = countViolations(course, list_of_courses)
+        violations += v
+        vio_list.append(v)
+    return (violations, vio_list)
+
+
 def sort_class(classes):
     classes = distribute_courses_to_req(classes)
     return classes
