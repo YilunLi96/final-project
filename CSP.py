@@ -4,13 +4,6 @@ import random
 import math
 
 
-# 0, make a copy of the course catalog
-catalog = read_catalog()
-
-# 1, Order the requirements to be satisfied (Variable Ordering)
-reqs = ['linalg', 'calc', 'basic', 'basic', 'boaz', 'theory', 'tech', 'tech', 'breadth', 'breadth']
-
-
 def backtracking():
 	return recursive_backtracking()
 
@@ -21,19 +14,8 @@ def recursive_backtracking(assignment):
 	else:
 		class_index = next_class_to_fill(assignment)
 		possible_courses = valid_options(class_index)
+		
 	return None
-
-
-# allowing duplicates returns list of classes that satisfy the requirement located at class_id
-def valid_options(class_id):
-	requirement_to_fill = reqs[class_id]
-	course_list = []
-
-	for course in catalog:
-		if requirement_to_fill in get_requirements(course):
-			course_list.append(course)
-	random.shuffle(course_list)
-	return course_list
 
 
 # # returns true if there are no violations from duplicates or prereqs, otherwise false
@@ -52,5 +34,3 @@ def valid_options(class_id):
 #         # use no_violations to do this
 
 #     # return list of successor course lists
-
-print valid_options(0)

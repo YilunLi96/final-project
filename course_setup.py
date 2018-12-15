@@ -1,5 +1,5 @@
 from readdata import *
-
+import random
 
 NUM_COURSES = 10
 
@@ -108,7 +108,12 @@ def count_courselist_totalviolations(list_of_courses):
         vio_list.append(v)
     return (violations, vio_list)
 
-## helper functions for CSP
+## helper functions and set_up for CSP
+
+# 0, make a copy of the course catalog
+catalog = read_catalog()
+reqs = ['linalg', 'calc', 'basic', 'basic', 'boaz', 'theory', 'tech', 'tech', 'breadth', 'breadth']
+
 
 # gives the index of the next class to fill in
 def next_class_to_fill(c_list):
@@ -125,6 +130,18 @@ def next_class_to_fill(c_list):
 # tells whether a given course list is fully assigned
 def course_list_complete(c_list):
     return next_class_to_fill(c_list) == None
+
+
+# allowing duplicates returns list of classes that satisfy the requirement located at class_id
+def valid_options(class_id):
+    requirement_to_fill = reqs[class_id]
+    course_list = []
+
+    for course in catalog:
+        if requirement_to_fill in get_requirements(course):
+            course_list.append(course)
+    random.shuffle(course_list)
+    return course_list
 
 
 def sort_class(classes):
