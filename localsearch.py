@@ -66,6 +66,3 @@ def simulated_annealing():
 
 
     return course_lst
-
-
-
