@@ -9,3 +9,5 @@ course_setup.py sets up the basic functions.
 Localsearch.py holds the functions for local search.
 
 CSP.py holds the functions for CSP.
+
+course_statistics.py analyze the results of our algorithms. 
