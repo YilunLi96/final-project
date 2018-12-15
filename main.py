@@ -1,5 +1,5 @@
 from localsearch import *
-
+from CSP import *
 
 print sort_class(iterative_less_conflicts())
 
