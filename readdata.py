@@ -1,4 +1,3 @@
-
 def read_catalog():
     catalog = {}
 
@@ -45,6 +44,20 @@ def read_catalog():
 
     return catalog
 
-# print catalog
-# print catalog['ES170']
-# print catalog['CS134']
+def weighted_read_catalog():
+    catalog = read_catalog()
+    for course in catalog:
+        catalog[course] += (0.1,)
+    return catalog
+
+# print weighted_read_catalog()
+
+def set_weighting(course, weight, catalog):
+    lst = list(catalog[course])
+    lst[3] = weight
+    catalog[course] = tuple(lst)
+
+# weighted_courses = weighted_read_catalog()
+# set_weighting('CS182', 1, weighted_courses)
+
+# print weighted_courses['CS182']

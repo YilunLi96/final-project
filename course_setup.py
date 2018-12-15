@@ -1,11 +1,55 @@
 from readdata import *
 import random
 
-# Honor Track
+# USER INPUTS
+
+# 1, Honor Track
 # honor_flag = 0
+
 # Non-honor Track
 honor_flag = 1
 
+# 2, course weighting setting
+weighted_courses = weighted_read_catalog()
+
+# weight can be from -1 (absolutely hate) to 1 (loves to take it)
+# the default weight is 0.1
+# example: set_weighting('CS182', 1)
+# examples
+set_weighting('CS182', 1., weighted_courses)
+set_weighting('CS61', 1., weighted_courses)
+set_weighting('CS50', 1., weighted_courses)
+set_weighting('Math55a', -1., weighted_courses)
+set_weighting('Math55b', -1., weighted_courses)
+set_weighting('Math23a', 0.5, weighted_courses)
+set_weighting('Math23b', 0.5, weighted_courses)
+set_weighting('CS134', 0.8, weighted_courses)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# set ups
 counts = dict()
 courses = read_catalog()
 
@@ -37,7 +81,7 @@ else:
     reqs = ['linalg', 'calc', 'basic', 'basic', 'boaz', 'theory', 'tech', 'tech', 'tech', 'breadth', 'breadth', 'breadth']
 
 
-
+# general helper functions
 def get_prereqs(course):
     "list of prereqs for a particular course"
     sem, p, sat = courses[course]
@@ -56,6 +100,7 @@ def get_semesters(course):
     return sem
 
 
+# local search helper functions
 def distribute_courses_to_req(classes):
 	"given a list of courses, distribute the courses to different requirements"
 	
@@ -131,10 +176,12 @@ def count_courselist_totalviolations(list_of_courses):
         vio_list.append(v)
     return (violations, vio_list)
 
+
 ## helper functions and set_up for CSP
 
-# 0, make a copy of the course catalog
+# make a copy of the course catalog
 catalog = read_catalog()
+
 
 # gives the index of the next class to fill in
 def next_class_to_fill(c_list):
