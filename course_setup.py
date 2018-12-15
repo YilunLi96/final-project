@@ -108,6 +108,24 @@ def count_courselist_totalviolations(list_of_courses):
         vio_list.append(v)
     return (violations, vio_list)
 
+## helper functions for CSP
+
+# gives the index of the next class to fill in
+def next_class_to_fill(c_list):
+    # search across the schedule and return class_id of first zero
+    for class_id in xrange(0, NUM_COURSES):
+        var = c_list[class_id]
+        if var == 0:
+            return class_id
+
+    # otherwise return none
+    return None
+
+
+# tells whether a given course list is fully assigned
+def course_list_complete(c_list):
+    return next_class_to_fill(c_list) == None
+
 
 def sort_class(classes):
     classes = distribute_courses_to_req(classes)
