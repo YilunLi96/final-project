@@ -1,9 +1,13 @@
 from localsearch import *
 from CSP import *
 
-print sort_class(iterative_less_conflicts())
+# print sort_class(iterative_less_conflicts())
 
-print sort_class(simulated_annealing())
+# print sort_class(simulated_annealing())
+
+CSP_initial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+print backtracking(CSP_initial)
 
 # print courses['Stat110']
 

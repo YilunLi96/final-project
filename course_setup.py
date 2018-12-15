@@ -149,6 +149,8 @@ def valid_options(class_id):
 def no_violations(c_list, course):
     prereq_list = get_prereqs(course)
     for pre in prereq_list:
+        if pre == 'None':
+            return True
         if pre not in c_list:
             return False
     return True

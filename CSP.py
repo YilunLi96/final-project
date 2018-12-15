@@ -4,8 +4,8 @@ import random
 import math
 
 
-def backtracking():
-	return recursive_backtracking()
+def backtracking(assignment):
+	return recursive_backtracking(assignment)
 
 def recursive_backtracking(assignment):
 	# if assignment is complete return it
@@ -31,5 +31,4 @@ def recursive_backtracking(assignment):
 				else:
 					remove_index = assignment.index(course)
 					assignment[remove_index] = 0
-
-	return None
+		return None
