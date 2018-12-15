@@ -2,8 +2,6 @@ from localsearch import *
 from CSP import *
 from course_setup import *
 
-CSP_initial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
 # # Honor Track
 # honor_flag = 0
 # #

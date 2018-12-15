@@ -1,18 +1,41 @@
 from readdata import *
 import random
 
-NUM_COURSES = 10
-
-courses = read_catalog()
+# Honor Track
+# honor_flag = 0
+# Non-honor Track
+honor_flag = 1
 
 counts = dict()
-counts['linalg'] = 1
-counts['calc'] = 1
-counts['basic'] = 2
-counts['boaz'] = 1
-counts['theory'] = 1
-counts['breadth'] = 2
-counts['tech'] = 2
+courses = read_catalog()
+
+if honor_flag == 1:
+    CSP_initial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    NUM_COURSES = 10
+
+    counts['linalg'] = 1
+    counts['calc'] = 1
+    counts['basic'] = 2
+    counts['boaz'] = 1
+    counts['theory'] = 1
+    counts['breadth'] = 2
+    counts['tech'] = 2
+
+    reqs = ['linalg', 'calc', 'basic', 'basic', 'boaz', 'theory', 'tech', 'tech', 'breadth', 'breadth']
+
+else:
+    CSP_initial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    NUM_COURSES = 12
+    counts['linalg'] = 1
+    counts['calc'] = 1
+    counts['basic'] = 2
+    counts['boaz'] = 1
+    counts['theory'] = 1
+    counts['breadth'] = 3
+    counts['tech'] = 3
+
+    reqs = ['linalg', 'calc', 'basic', 'basic', 'boaz', 'theory', 'tech', 'tech', 'tech', 'breadth', 'breadth', 'breadth']
+
 
 
 def get_prereqs(course):
@@ -112,8 +135,6 @@ def count_courselist_totalviolations(list_of_courses):
 
 # 0, make a copy of the course catalog
 catalog = read_catalog()
-reqs = ['linalg', 'calc', 'basic', 'basic', 'boaz', 'theory', 'tech', 'tech', 'breadth', 'breadth']
-
 
 # gives the index of the next class to fill in
 def next_class_to_fill(c_list):

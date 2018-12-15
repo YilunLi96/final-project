@@ -6,7 +6,10 @@ import math
 
 # Important: prefers classes with less pre_reqs!
 def iterative_less_conflicts():
-    course_lst = random.sample(list(courses), 10)
+    if honor_flag == 1:
+        course_lst = random.sample(list(courses), 10)
+    else:
+        course_lst = random.sample(list(courses), 12)
 
     while count_courselist_totalviolations(course_lst)[0] != 0:
 		# delete biggest violation course from course_lst
@@ -31,7 +34,11 @@ def iterative_less_conflicts():
 
 
 def simulated_annealing():
-    course_lst = random.sample(list(courses), 10)
+    if honor_flag == 1:
+    	course_lst = random.sample(list(courses), 10)
+    else:
+    	course_lst = random.sample(list(courses), 12)
+
     T = 1000
 
     DECAY = 0.98
