@@ -1,6 +1,7 @@
 from readdata import *
 from course_setup import *
 import random
+import math
 
 
 # Important: prefers classes with less pre_reqs!
@@ -31,7 +32,7 @@ def iterative_less_conflicts():
 
 def simulated_annealing():
     course_lst = random.sample(list(courses), 10)
-    Temprature = 
+    T = 1000
 
     DECAY = 0.98
 
@@ -50,10 +51,18 @@ def simulated_annealing():
     		random_course = random.sample(list(courses), 1)
     	temp_list.append(random_course[0])
 
-    	if count_courselist_totalviolations(temp_list)[0] < number_of_violations:
+    	# test if we accept the new list
+    	new_num_violations = count_courselist_totalviolations(temp_list)[0]
+    	if new_num_violations < number_of_violations:
     		course_lst = temp_list
     	else:
-    		if 
+    		if random.random() <= math.exp((number_of_violations - new_num_violations) / T):
+    			course_lst = temp_list
+    		else:
+    			course_lst = course_lst
+
+    	# update temprature
+    	T *= DECAY
 
 
     return course_lst

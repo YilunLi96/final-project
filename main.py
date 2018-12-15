@@ -3,6 +3,8 @@ from localsearch import *
 
 print sort_class(iterative_less_conflicts())
 
+print sort_class(simulated_annealing())
+
 # print courses['Stat110']
 
 # print len(course_catalog)
