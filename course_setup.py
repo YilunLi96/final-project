@@ -144,6 +144,15 @@ def valid_options(class_id):
     return course_list
 
 
+# returns true if there are no violations or prereqs, otherwise false
+# no need to check from requirements since we know the order they are satisfied in
+def no_violations(c_list, course):
+    prereq_list = get_prereqs(course)
+    for pre in prereq_list:
+        if pre not in c_list:
+            return False
+    return True
+
 def sort_class(classes):
     classes = distribute_courses_to_req(classes)
     return classes

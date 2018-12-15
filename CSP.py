@@ -24,25 +24,12 @@ def recursive_backtracking(assignment):
 			if course in assignment:
 				continue
 			if no_violations(assignment, course):
-				assignment = add_course(assignment, course)
+				assignment[class_index] = course
 				result = recursive_backtracking(assignment)
 				if result != None:
 					return result
 				else:
-					assignment = remove_course(c_list, course)
+					remove_index = assignment.index(course)
+					assignment[remove_index] = 0
 
 	return None
-
-
-# returns true if there are no violations from duplicates or prereqs, otherwise false
-# no need to check from requirements since we know the order they are satisfied in
-def no_violations(c_list, course):
-	return True
-
-# replace the first zero in c_list to course
-def add_course(c_list, course):
-	return c_list
-
-# replace this course with zero
-def remove_course(c_list, course):
-	return c_list
