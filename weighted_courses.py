@@ -5,7 +5,6 @@ from readdata import *
 from course_setup import *
 
 
-
 def simulated_annealing_weighted():
     if honor_flag == 1:
     	course_lst = random.sample(list(courses), 10)
