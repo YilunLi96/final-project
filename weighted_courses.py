@@ -12,7 +12,7 @@ def simulated_annealing_weighted():
     else:
     	course_lst = random.sample(list(courses), 12)
 
-    T = 1000
+    T = 1000.
 
     DECAY = 0.98
 
@@ -33,16 +33,22 @@ def simulated_annealing_weighted():
 
     	# test if we accept the new list
     	new_num_violations = count_courselist_totalviolations(temp_list)[0]
-    	if new_num_violations < number_of_violations:
+    	if new_num_violations < number_of_violations and total_utility(temp_list) > total_utility(course_lst):
     		course_lst = temp_list
     	else:
-    		if random.random() <= math.exp((number_of_violations - new_num_violations) / T):
-    			course_lst = temp_list
-    		else:
-    			course_lst = course_lst
+            if new_num_violations >= number_of_violations:
+                if random.random() <= math.exp((number_of_violations - new_num_violations) / T):
+    			    course_lst = temp_list
+                else:
+    			    course_lst = course_lst
+            else:
+                if random.random() <= math.exp((total_utility(temp_list) - total_utility(course_lst)) / T):
+                    course_lst = temp_list
+                else:
+                    course_lst = course_lst
 
     	# update temprature
     	T *= DECAY
 
 
-    return course_lst
+    return course_lst, total_utility(course_lst)
