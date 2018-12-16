@@ -65,6 +65,7 @@ courses = read_catalog()
 
 if honor_flag == 1:
     CSP_initial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    CSP_initial2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     NUM_COURSES = 10
 
     counts['linalg'] = 1
@@ -79,6 +80,7 @@ if honor_flag == 1:
 
 else:
     CSP_initial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    CSP_initial2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     NUM_COURSES = 12
     counts['linalg'] = 1
     counts['calc'] = 1
@@ -230,6 +232,7 @@ def no_violations(c_list, course):
             return False
     return True
 
+
 # weighted course helper functions
 def total_utility(c_list):
     utility = 0.
@@ -237,8 +240,23 @@ def total_utility(c_list):
         utility += weighted_courses[course][3]
     return utility
 
+
 def sort_class(classes):
     classes = distribute_courses_to_req(classes)
     return classes
 
+max_utility = -99999.
+for weighted_class in weighted_courses:
+    if weighted_courses[weighted_class][3] > max_utility:
+        max_utility = weighted_courses[weighted_class][3]
+
+
+def total_pain(c_list):
+    pain = 0.
+    for course in c_list:
+        if course == 0 or course == 0.:
+            continue
+        pain += (max_utility - weighted_courses[course][3])
+    return pain
 # print total_utility(['Math55a', 'Math25b', 'CS50', 'CS51', 'CS121', 'AM107', 'CS244R', 'Stat110', 'CS189', 'AM207'])
+# print max_utility

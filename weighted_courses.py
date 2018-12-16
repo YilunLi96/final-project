@@ -3,6 +3,7 @@ from localsearch import *
 from CSP import *
 from readdata import *
 from course_setup import *
+import util
 
 
 def simulated_annealing_weighted():
@@ -70,5 +71,28 @@ def simulated_annealing_weighted():
 
     return course_lst, total_utility(course_lst)
 
-def CSP_uniform_cost_reverse():
-    return course_lst, total_utility(course_lst)
+
+def CSP_uniform_cost_weighted(assignment):
+    priority_queue = util.PriorityQueue()
+
+    priority_queue.push(assignment, 0)
+    flag = True
+
+    while priority_queue.isEmpty() == False and flag:
+        new_assignemnt = priority_queue.pop()
+        if course_list_complete(new_assignemnt):
+            return new_assignemnt, total_utility(new_assignemnt)
+        else:
+            # locate the next class slot to be filled
+            class_index = next_class_to_fill(new_assignemnt)
+            # get all the possible courses that can fulfill the next slot
+            possible_courses = valid_options(class_index)
+
+            for possible_class in possible_courses:
+                if no_violations(new_assignemnt, possible_class) and possible_class not in new_assignemnt:
+                    assignment_push = new_assignemnt[:]
+                    assignment_push[class_index] = possible_class
+                    priority_queue.push(assignment_push, total_pain(assignment_push))
+
+    return None
+

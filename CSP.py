@@ -7,6 +7,7 @@ import math
 def backtracking(assignment):
 	return recursive_backtracking(assignment)
 
+
 def recursive_backtracking(assignment):
 	# if assignment is complete return it
 	if course_list_complete(assignment):

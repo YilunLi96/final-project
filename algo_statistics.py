@@ -351,3 +351,7 @@ def group_three_most_frequent():
 # make the graphs
 group_three_most_frequent()
 print "DONE GROUP 3.1"
+
+
+# GROUP 3.2
+CSP_uniform_cost_weighted(CSP_initial2)
