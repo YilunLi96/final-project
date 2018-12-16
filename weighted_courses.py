@@ -42,13 +42,12 @@ def simulated_annealing_weighted():
                 else:
     			    course_lst = course_lst
             else:
-                if random.random() <= math.exp((total_utility(temp_list) - total_utility(course_lst)) / T):
+                if random.random() <= math.exp((total_utility(temp_list) - total_utility(course_lst)) / T / 2.):
                     course_lst = temp_list
                 else:
                     course_lst = course_lst
 
     	# update temprature
     	T *= DECAY
-
 
     return course_lst, total_utility(course_lst)

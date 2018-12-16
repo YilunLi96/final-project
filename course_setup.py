@@ -14,7 +14,7 @@ weighted_courses = weighted_read_catalog()
 
 # weight can be from -1 (absolutely hate) to 1 (absolutely love to take it)
 # the default weight is 0.1
-# example: set_weighting('CS182', 1)
+# example: set_weighting('CS182', 1, weighted_courses)
 # examples
 set_weighting('CS182', 1., weighted_courses)
 set_weighting('CS61', 1., weighted_courses)
