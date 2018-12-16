@@ -39,10 +39,9 @@ def iterative_less_conflicts_have_to_take():
         if deleted_class not in additional_lst:
         	total_list.remove(deleted_class)
         	additional_lst = [x for x in total_list if x not in course_lst]
-
-
-        additional_lst.remove(deleted_class)
-        total_list.remove(deleted_class)
+        else:
+            additional_lst.remove(deleted_class)
+            total_list.remove(deleted_class)
 		# loop through courses not in course_lst such that adding it doesn't add violation or violation decreases
         # add first one found
         course_names = courses.keys()[:]
