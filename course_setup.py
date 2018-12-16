@@ -12,6 +12,12 @@ honor_flag = 1
 # 2, users specify classes they have to take
 specified_courses = specify_read_catalog()
 
+# example: specify_have_to_take('CS182', specified_courses)
+specify_have_to_take('CS182', specified_courses)
+specify_have_to_take('CS124', specified_courses)
+specify_have_to_take('CS61', specified_courses)
+
+
 # 3, course weighting setting
 weighted_courses = weighted_read_catalog()
 
@@ -88,20 +94,17 @@ else:
 # general helper functions
 def get_prereqs(course):
     "list of prereqs for a particular course"
-    sem, p, sat = courses[course]
-    return p
+    return courses[course][1]
 
 
 def get_requirements(course):
     "list of requirements this course fulfills"
-    sem, p, sat = courses[course]
-    return sat
+    return courses[course][2]
 
 
 def get_semesters(course):
     "list of semesters that the course is offered"
-    sem, p, sat = courses[course]
-    return sem
+    return courses[course][0]
 
 
 # local search helper functions
