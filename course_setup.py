@@ -12,15 +12,16 @@ honor_flag = 1
 # 2, course weighting setting
 weighted_courses = weighted_read_catalog()
 
-# weight can be from -1 (absolutely hate) to 1 (absolutely love to take it)
+# weight can be from any real number, normally between -1 to 1
+# where -1 is hate, 1 is love. You can also give classes much lower/higher ratings
 # the default weight is 0.1
 # example: set_weighting('CS182', 1, weighted_courses)
 # examples
-set_weighting('CS182', 1., weighted_courses)
+set_weighting('CS182', 1.5, weighted_courses)
 set_weighting('CS61', 1., weighted_courses)
 set_weighting('CS50', 1., weighted_courses)
-set_weighting('Math55a', -1., weighted_courses)
-set_weighting('Math55b', -1., weighted_courses)
+set_weighting('Math55a', -3., weighted_courses)
+set_weighting('Math55b', -3., weighted_courses)
 set_weighting('Math23a', 0.5, weighted_courses)
 set_weighting('Math23b', 0.5, weighted_courses)
 set_weighting('CS134', 0.8, weighted_courses)
