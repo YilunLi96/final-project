@@ -91,8 +91,8 @@ def group_one_most_frequent():
     plt.gcf().clear()
 
 # make the graphs
-group_one_most_frequent()
-print "DONE GROUP 1.1"
+# group_one_most_frequent()
+# print "DONE GROUP 1.1"
 
 
 def group_one_run_times():
@@ -163,8 +163,8 @@ def group_one_run_times():
 
     return run_times
 print "\n\n"
-print group_one_run_times()
-print "DONE GROUP 1.2"
+# print group_one_run_times()
+# print "DONE GROUP 1.2"
 
 
 # GROUP TWO
@@ -177,7 +177,7 @@ print "DONE GROUP 1.2"
 
 def group_two_most_frequent():
     # iterations to run
-    trials = 1000
+    trials = 10
 
     # variable for how many top frequent courses to show
     top_courses = 15
@@ -231,11 +231,11 @@ def group_two_most_frequent():
     plt.gcf().clear()
 
 # make the graphs
-group_two_most_frequent()
-print "DONE GROUP 2.1"
+# group_two_most_frequent()
+# print "DONE GROUP 2.1"
 
 def group_two_run_times():
-    trials = 1000
+    trials = 10
 
     # only need to know the total time it takes to run, which can then be average
     # iterative -> simulated annealing -> backtracking
@@ -289,9 +289,9 @@ def group_two_run_times():
     plt.gcf().clear()
 
     return run_times
-print "\n\n"
-print group_two_run_times()
-print "DONE GROUP 2.2"
+# print "\n\n"
+# print group_two_run_times()
+# print "DONE GROUP 2.2"
 
 # GROUP THREE
 # 1. run a bunch of iterations (1000? 10000?), then calculate speed
