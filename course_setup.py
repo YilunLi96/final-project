@@ -12,7 +12,7 @@ honor_flag = 1
 # 2, course weighting setting
 weighted_courses = weighted_read_catalog()
 
-# weight can be from -1 (absolutely hate) to 1 (loves to take it)
+# weight can be from -1 (absolutely hate) to 1 (absolutely love to take it)
 # the default weight is 0.1
 # example: set_weighting('CS182', 1)
 # examples
@@ -223,6 +223,15 @@ def no_violations(c_list, course):
             return False
     return True
 
+# weighted course helper functions
+def total_utility(c_list):
+    utility = 0.
+    for course in c_list:
+        utility += weighted_courses[course][3]
+    return utility
+
 def sort_class(classes):
     classes = distribute_courses_to_req(classes)
     return classes
+
+# print total_utility(['Math55a', 'Math25b', 'CS50', 'CS51', 'CS121', 'AM107', 'CS244R', 'Stat110', 'CS189', 'AM207'])

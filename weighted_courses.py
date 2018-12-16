@@ -4,7 +4,7 @@ from CSP import *
 from readdata import *
 from course_setup import *
 
-courses_catalog = read_catalog()
+
 
 def simulated_annealing_weighted():
     if honor_flag == 1:
