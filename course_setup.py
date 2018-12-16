@@ -9,7 +9,10 @@ import random
 # Non-honor Track
 honor_flag = 1
 
-# 2, course weighting setting
+# 2, users specify classes they have to take
+specified_courses = specify_read_catalog()
+
+# 3, course weighting setting
 weighted_courses = weighted_read_catalog()
 
 # weight can be from any real number, normally between -1 to 1

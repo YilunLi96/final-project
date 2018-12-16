@@ -57,6 +57,19 @@ def set_weighting(course, weight, catalog):
     lst[3] = weight
     catalog[course] = tuple(lst)
 
+
+def specify_read_catalog():
+    catalog = read_catalog()
+    for course in catalog:
+        catalog[course] += (0,)
+    return catalog
+
+
+def specify_have_to_take(course, catalog):
+    lst = list(catalog[course])
+    lst[3] = 1
+    catalog[course] = tuple(lst)
+
 # weighted_courses = weighted_read_catalog()
 # set_weighting('CS182', 1, weighted_courses)
 

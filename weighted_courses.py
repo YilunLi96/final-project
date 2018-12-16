@@ -69,3 +69,6 @@ def simulated_annealing_weighted():
 
 
     return course_lst, total_utility(course_lst)
+
+def CSP_uniform_cost_reverse():
+    return course_lst, total_utility(course_lst)
