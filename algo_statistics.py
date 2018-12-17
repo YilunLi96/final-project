@@ -91,8 +91,9 @@ def group_one_most_frequent():
     plt.gcf().clear()
 
 # make the graphs
-# group_one_most_frequent()
-# print "DONE GROUP 1.1"
+print "START OF GROUP 1.1"
+group_one_most_frequent()
+print "DONE GROUP 1.1"
 
 
 def group_one_run_times():
@@ -110,7 +111,6 @@ def group_one_run_times():
     i_time = t1-t0
     i_average = i_time / float(trials)
     run_times.append(i_average)
-    print "done"
 
 
     # simulated annealing runs
@@ -121,7 +121,6 @@ def group_one_run_times():
     s_time = t1-t0
     s_average = s_time / float(trials)
     run_times.append(s_average)
-    print "done"
 
 
     # backtracking runs
@@ -132,7 +131,6 @@ def group_one_run_times():
     b_time = t1-t0
     b_average = b_time / float(trials)
     run_times.append(b_average)
-    print "done"
 
     # take the log of the run times for graphing
     log_times = np.log10(run_times)
@@ -162,9 +160,10 @@ def group_one_run_times():
     plt.gcf().clear()
 
     return run_times
-# print "\n\n"
-# print group_one_run_times()
-# print "DONE GROUP 1.2"
+
+print "START OF GROUP 1.2"
+print group_one_run_times()
+print "DONE GROUP 1.2"
 
 
 # GROUP TWO
@@ -190,7 +189,6 @@ def group_two_most_frequent():
     for i in xrange(0,trials):
         iterative.extend(iterative_less_conflicts_have_to_take())
         back.extend(backtracking(set_CSP_initial()))
-    print "done running -> more stuff now"
 
     # form counts from the list of classes
     i_counter = collections.Counter(iterative)
@@ -231,8 +229,9 @@ def group_two_most_frequent():
     plt.gcf().clear()
 
 # make the graphs
-# group_two_most_frequent()
-# print "DONE GROUP 2.1"
+print "START OF GROUP 2.1"
+group_two_most_frequent()
+print "DONE GROUP 2.1"
 
 def group_two_run_times():
     trials = 1000
@@ -249,7 +248,6 @@ def group_two_run_times():
     i_time = t1-t0
     i_average = i_time / float(trials)
     run_times.append(i_average)
-    print "done"
 
     # backtracking runs
     t0 = time.clock()
@@ -259,7 +257,6 @@ def group_two_run_times():
     b_time = t1-t0
     b_average = b_time / float(trials)
     run_times.append(b_average)
-    print "done"
 
     # take the log of the run times for graphing
     log_times = np.log10(run_times)
@@ -289,9 +286,10 @@ def group_two_run_times():
     plt.gcf().clear()
 
     return run_times
-# print "\n\n"
-# print group_two_run_times()
-# print "DONE GROUP 2.2"
+
+print "START OF GROUP 2.2"
+print group_two_run_times()
+print "DONE GROUP 2.2"
 
 # GROUP THREE
 # 1. run a bunch of iterations (1000? 10000?), then calculate speed
@@ -320,7 +318,6 @@ def group_three_most_frequent():
     s_time = t1-t0
     s_average = s_time / float(trials)
     print "Average Runtime is: " + str(s_average)
-    print "done running -> more stuff now"
 
     # form counts from the list of classes
     s_counter = collections.Counter(sa)
@@ -349,8 +346,9 @@ def group_three_most_frequent():
 
 
 # make the graphs
-# group_three_most_frequent()
-# print "DONE GROUP 3.1"
+print "START OF GROUP 3.1"
+group_three_most_frequent()
+print "DONE GROUP 3.1"
 
 
 # # GROUP 3.2
@@ -376,7 +374,6 @@ def group_four_most_frequent():
     s_time = t1-t0
     s_average = s_time / float(trials)
     print "Average Runtime is: " + str(s_average)
-    print "done running -> more stuff now"
 
     # form counts from the list of classes
     s_counter = collections.Counter(sa)
@@ -403,8 +400,9 @@ def group_four_most_frequent():
     total = sum(utilities) / float(len(utilities))
     print "Total Expected Utility is: " + str(total)
 
+print "START OF GROUP 3.2"
 group_four_most_frequent()
-
+print "DONE GROUP 3.2"
 
 # GROUP 3.2
 # CSP_uniform_cost_weighted([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
