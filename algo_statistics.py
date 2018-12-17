@@ -162,7 +162,7 @@ def group_one_run_times():
     plt.gcf().clear()
 
     return run_times
-print "\n\n"
+# print "\n\n"
 # print group_one_run_times()
 # print "DONE GROUP 1.2"
 
@@ -177,7 +177,7 @@ print "\n\n"
 
 def group_two_most_frequent():
     # iterations to run
-    trials = 10
+    trials = 1000
 
     # variable for how many top frequent courses to show
     top_courses = 15
@@ -235,7 +235,7 @@ def group_two_most_frequent():
 # print "DONE GROUP 2.1"
 
 def group_two_run_times():
-    trials = 10
+    trials = 1000
 
     # only need to know the total time it takes to run, which can then be average
     # iterative -> simulated annealing -> backtracking
@@ -349,9 +349,66 @@ def group_three_most_frequent():
 
 
 # make the graphs
-group_three_most_frequent()
-print "DONE GROUP 3.1"
+# group_three_most_frequent()
+# print "DONE GROUP 3.1"
 
 
+# # GROUP 3.2
+def group_four_most_frequent():
+    # iterations to run
+    trials = 100
+
+    # variable for how many top frequent courses to show
+    top_courses = 15
+
+    # lists to hold list of courses
+    sa = []
+    utilities = []
+
+    # run the code to gather the course data
+    t0 = time.clock()
+    for i in xrange(0,trials):
+        a,b = CSP_uniform_cost_weighted(CSP_initial2)
+        sa.extend(a)
+        utilities.append(b)
+    t1 = time.clock()
+
+    s_time = t1-t0
+    s_average = s_time / float(trials)
+    print "Average Runtime is: " + str(s_average)
+    print "done running -> more stuff now"
+
+    # form counts from the list of classes
+    s_counter = collections.Counter(sa)
+
+    # get top frequencies
+    s_top = s_counter.most_common(top_courses)
+
+    # unpack into two lists
+    s_courses, s_count = map(list, zip(*s_top))
+
+    # simulated annealing bar chart
+    y_pos = np.arange(len(s_courses))
+
+    plt.bar(y_pos, s_count, align='center', alpha=0.5)
+    plt.xticks(y_pos, s_courses, rotation=45)
+    plt.ylabel('Frequency')
+    plt.title('Weighted Uniform Cost (Non-honors)')
+    plt.xlabel('Course Name')
+    plt.tight_layout()
+
+    plt.savefig('g_three_uni.png')
+
+    # calculate total utility
+    total = sum(utilities) / float(len(utilities))
+    print "Total Expected Utility is: " + str(total)
+
+group_four_most_frequent()
+
+
+<<<<<<< HEAD
 # GROUP 3.2
 CSP_uniform_cost_weighted([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+=======
+# CSP_uniform_cost_weighted(CSP_initial2)
+>>>>>>> 1baabac5941ea889b8499d6eb4eacc1309af9812
