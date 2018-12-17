@@ -368,7 +368,7 @@ def group_four_most_frequent():
     # run the code to gather the course data
     t0 = time.clock()
     for i in xrange(0,trials):
-        a,b = CSP_uniform_cost_weighted(CSP_initial2)
+        a,b = CSP_uniform_cost_weighted([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         sa.extend(a)
         utilities.append(b)
     t1 = time.clock()
@@ -406,9 +406,6 @@ def group_four_most_frequent():
 group_four_most_frequent()
 
 
-<<<<<<< HEAD
 # GROUP 3.2
-CSP_uniform_cost_weighted([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-=======
-# CSP_uniform_cost_weighted(CSP_initial2)
->>>>>>> 1baabac5941ea889b8499d6eb4eacc1309af9812
+# CSP_uniform_cost_weighted([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
