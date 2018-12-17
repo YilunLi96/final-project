@@ -33,7 +33,7 @@ def group_one_most_frequent():
     for i in xrange(0,trials):
         iterative.extend(iterative_less_conflicts())
         sim_an.extend(simulated_annealing())
-        back.extend(backtracking(CSP_initial))
+        back.extend(backtracking([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
     print "done running -> more stuff now"
 
     # form counts from the list of classes
@@ -126,7 +126,7 @@ def group_one_run_times():
 
     # backtracking runs
     t0 = time.clock()
-    for i in range(trials): backtracking(CSP_initial)
+    for i in range(trials): backtracking([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     t1 = time.clock()
 
     b_time = t1-t0
@@ -354,4 +354,4 @@ print "DONE GROUP 3.1"
 
 
 # GROUP 3.2
-CSP_uniform_cost_weighted(CSP_initial2)
+CSP_uniform_cost_weighted([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
