@@ -1,5 +1,7 @@
 # final-project
 
+See final report for detailed documentation.
+
 Main.py runs the interface.
 
 Readdata.py organizes the data into a dictionary.
