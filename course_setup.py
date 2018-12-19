@@ -3,9 +3,7 @@ import random
 
 # USER INPUTS
 
-# 1, Honor Track
-# honor_flag = 0
-
+# 1, 
 # Non-honor Track
 honor_flag = 1
 
